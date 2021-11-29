@@ -5,26 +5,26 @@ using System.Text;
 
 namespace Core
 {
-    public class Student : IObject
+    public class Curator : IObject
     {
         private int _id;
         private int _groupId;
-        private int _age;
         private string _name;
+        private string _email;
 
         public List<string> Data
         {
             get
             {
                 DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
-                DatabaseModels.Student student = db.Students.SingleOrDefault(x => x.Id == _id);
+                DatabaseModels.Curator curator = db.Curators.SingleOrDefault(x => x.Id == _id);
 
-                if (student != null)
+                if (curator != null)
                 {
                     List<string> temp = new List<string>();
-                    temp.Add(Convert.ToString(student.GroupId));
-                    temp.Add(Convert.ToString(student.Age));
-                    temp.Add(Convert.ToString(student.Name));
+                    temp.Add(Convert.ToString(curator.GroupId));
+                    temp.Add(Convert.ToString(curator.Name));
+                    temp.Add(Convert.ToString(curator.Email));
                     return temp;
                 }
                 else
@@ -33,17 +33,16 @@ namespace Core
                 }
             }
         }
-
         public int GroupId
         {
             get
             {
                 DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
-                DatabaseModels.Student student = db.Students.SingleOrDefault(x => x.Id == _id);
+                DatabaseModels.Curator curator = db.Curators.SingleOrDefault(x => x.Id == _id);
 
-                if (student != null)
+                if (curator != null)
                 {
-                    return student.GroupId;
+                    return curator.GroupId;
                 }
                 else
                 {
@@ -60,43 +59,43 @@ namespace Core
                 throw new FormatException();
         }
 
-        private void ConvertInputData(string groupId, string name, string age)
+        private void ConvertInputData(string groupId, string name, string email)
         {
-            if (int.TryParse(groupId, out int a) && int.TryParse(age, out int b))
+            if (int.TryParse(groupId, out int a))
             {
                 _groupId = Convert.ToInt32(groupId);
-                _age = Convert.ToInt32(age);
+                _email = email;
                 _name = name;
-            }                
+            }
             else
                 throw new FormatException();
         }
 
-        
-        public Student(string id)
+
+        public Curator(string id)
         {
             ConvertInputId(id);
         }
-        public Student(string groupId, string name, string age)
+        public Curator(string groupId, string name, string email)
         {
-            ConvertInputData(groupId, name, age);
+            ConvertInputData(groupId, name, email);
         }
 
-        public Student(string groupId, string name, string age, string id)
+        public Curator(string groupId, string name, string email, string id)
         {
-            ConvertInputData(groupId, name, age);
+            ConvertInputData(groupId, name, email);
             ConvertInputId(id);
         }
         public void Change()
         {
             DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
-            DatabaseModels.Student student = db.Students.SingleOrDefault(x => x.Id == _id);
+            DatabaseModels.Curator curator = db.Curators.SingleOrDefault(x => x.Id == _id);
 
-            if (student != null)
+            if (curator != null)
             {
-                student.Age = _age;
-                student.GroupId = _groupId;
-                student.Name = _name;
+                curator.Name = _name;
+                curator.GroupId = _groupId;
+                curator.Email = _email;
                 db.SaveChanges();
             }
             else
@@ -106,24 +105,28 @@ namespace Core
         }
 
         public void Create()
-        {
+        { 
             DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
-            
-            DatabaseModels.Student student = new DatabaseModels.Student { Name = _name, Age = _age, GroupId = _groupId };
-            db.Students.Add(student);
-            db.SaveChanges();
-            
+            if ((from c in db.Curators
+                 where c.GroupId == _groupId
+                 select c).SingleOrDefault() == null)
+            {
+                DatabaseModels.Curator curator = new DatabaseModels.Curator { Name = _name, GroupId = _groupId, Email = _email };
+                db.Curators.Add(curator);
+                db.SaveChanges();
+            }
+            else
+                throw new Exception();
         }
 
         public void Delete()
         {
             DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
+            DatabaseModels.Curator curator = db.Curators.SingleOrDefault(x => x.Id == _id);
 
-            DatabaseModels.Student student = db.Students.SingleOrDefault(x => x.Id == _id);
-
-            if (student != null)
+            if (curator != null)
             {
-                db.Students.Remove(student);
+                db.Curators.Remove(curator);
                 db.SaveChanges();
             }
             else

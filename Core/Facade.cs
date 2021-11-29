@@ -5,30 +5,33 @@ namespace Core
 {
     public class Facade : IFacade
     {
-        Student student;
-        public Facade(Student s)
+        private IObject obj;
+
+        public Facade(IObject s)
         {
-            student = s;
+            obj = s;
+        }
+        public void ChangeObject()
+        {
+            obj.Change();
+        }
+        public void CreateObject()
+        {
+            obj.Create();
+        }
+        public void DeleteObject()
+        {
+            obj.Delete();
         }
 
-        public void ChangeStudent()
+        public int NumOfStudentsInGroup()
         {
-            student.Change();
+            throw new NotImplementedException();
         }
 
-        public void CreateStudent()
+        public List<string> showObjectData()
         {
-            student.Create();
-        }
-
-        public void DeleteStudent()
-        {
-            student.Delete();
-        }
-
-        public List<string> showStudentData()
-        {
-            return student.Data;
+            return obj.Data;
         }
     }
 }
