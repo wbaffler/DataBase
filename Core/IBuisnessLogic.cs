@@ -6,9 +6,9 @@ namespace Core
 {
     public interface IBuisnessLogic
     {
-        void CountStudentsInGroup();
-        void FindCurator();
-        void FindAvgAge();
+        void CountStudentsInGroup(Student student);
+        void FindCurator(Student student);
+        void FindAvgAge(Curator curator);
         int NumOfStudents { get; }
         string CuratorName { get; }
         double AvgAge { get; }

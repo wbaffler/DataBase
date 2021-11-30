@@ -6,7 +6,7 @@ namespace Core
 {
     public interface IObject
     {
-        List<string> Data { get; }
+        List<string> Row { get; }
         void Create();
         void Change();
         void Delete();

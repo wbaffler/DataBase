@@ -62,6 +62,7 @@ namespace Presentation
             this.GroupBut.TabIndex = 2;
             this.GroupBut.Text = "Группа";
             this.GroupBut.UseVisualStyleBackColor = true;
+            this.GroupBut.Click += new System.EventHandler(this.GroupBut_Click);
             // 
             // CuratorBut
             // 
@@ -71,6 +72,7 @@ namespace Presentation
             this.CuratorBut.TabIndex = 3;
             this.CuratorBut.Text = "Куратор";
             this.CuratorBut.UseVisualStyleBackColor = true;
+            this.CuratorBut.Click += new System.EventHandler(this.CuratorBut_Click);
             // 
             // Form1
             // 

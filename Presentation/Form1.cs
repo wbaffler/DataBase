@@ -19,29 +19,18 @@ namespace Presentation
 
         private void StudentBut_Click(object sender, EventArgs e)
         {
-            //Core.Facade facade = new Core.Facade(new Core.Student("1", "Andrew", "19"));
-            //facade.createStudent();
-
-            //Core.Facade facade = new Core.Facade(new Core.Student("2"));
-            //facade.deleteStudent();
-
-            /*Core.Facade facade = new Core.Facade(new Core.Student("3"));
-
-            Console.WriteLine("Объекты успешно сохранены");
-            foreach (string s in facade.showObjectData())
-            {
-                Console.WriteLine(s);
-            }
-
-            Core.Facade facade1 = new Core.Facade(new Core.Student("2", "Andreyyy", "20", "3"));
-            facade1.ChangeObject();
-            foreach (string s in facade1.showObjectData())
-            {
-                Console.WriteLine(s);
-            }*/
-
             StudentForm newForm = new StudentForm();
             newForm.Show();
+        }
+
+        private void GroupBut_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CuratorBut_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -39,16 +39,35 @@ namespace Presentation
         {
             presenter.Delete(IdTB.Text);
         }
+
+        private void NumberInGroupBut_Click(object sender, EventArgs e)
+        {
+            presenter.CalculateNumberOfStudents(IdTB.Text);
+        }
+
+        private void CuratorNameBut_Click(object sender, EventArgs e)
+        {
+            presenter.NameOfCurator(IdTB.Text);
+        }
         public void DisplayError(string errorText)
         {
             MessageBox.Show(errorText);
         }
 
-        public void DisplayData(List<string> data)
+        public void DisplayData(string groupId, string name, string age)
         {
-            ChGroupIdTB.Text = data[0];
-            ChNameTB.Text = data[1];
-            ChAgeTB.Text = data[2];
+            ChGroupIdTB.Text = groupId;
+            ChNameTB.Text = name;
+            ChAgeTB.Text = age;
         }
+
+        public string NumberOfStudents { set => NumInGroupLabel.Text = value;  } 
+        public string CuratorName { set => CuratorNameLabel.Text = value; }
+        public void DisplaySuccess()
+        {
+            SuccessLabel.Text = "Успешно!";
+        }
+        
+
     }
 }

@@ -12,7 +12,7 @@ namespace Core
         private int _age;
         private string _name;
 
-        public List<string> Data
+        public List<string> Row
         {
             get
             {
@@ -22,6 +22,7 @@ namespace Core
                 if (student != null)
                 {
                     List<string> temp = new List<string>();
+                    temp.Add(Convert.ToString(student.Id));
                     temp.Add(Convert.ToString(student.GroupId));
                     temp.Add(Convert.ToString(student.Age));
                     temp.Add(Convert.ToString(student.Name));
@@ -54,10 +55,16 @@ namespace Core
 
         private void ConvertInputId(string id)
         {
+            DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
             if (int.TryParse(id, out int a))
+            {
                 _id = Convert.ToInt32(id);
+                DatabaseModels.Student student = db.Students.SingleOrDefault(x => x.Id == _id);
+                if (student == null)
+                    throw new ArgumentOutOfRangeException();
+            }
             else
-                throw new FormatException();
+                throw new FormatException();                          
         }
 
         private void ConvertInputData(string groupId, string name, string age)
@@ -91,8 +98,9 @@ namespace Core
         {
             DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
             DatabaseModels.Student student = db.Students.SingleOrDefault(x => x.Id == _id);
+            DatabaseModels.Group group = db.Groups.SingleOrDefault(x => x.Id == _groupId);
 
-            if (student != null)
+            if (group != null)
             {
                 student.Age = _age;
                 student.GroupId = _groupId;
@@ -101,18 +109,26 @@ namespace Core
             }
             else
             {
-                throw new ArgumentOutOfRangeException();
+                throw new Exception("Invalid group");
             }
         }
 
         public void Create()
         {
             DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
-            
-            DatabaseModels.Student student = new DatabaseModels.Student { Name = _name, Age = _age, GroupId = _groupId };
-            db.Students.Add(student);
-            db.SaveChanges();
-            
+            DatabaseModels.Group group = db.Groups.SingleOrDefault(x => x.Id == _groupId);
+
+            if (group != null)
+            {
+                DatabaseModels.Student student = new DatabaseModels.Student { Name = _name, Age = _age, GroupId = _groupId };
+                db.Students.Add(student);
+                db.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("Invalid group");
+            }
+
         }
 
         public void Delete()
@@ -121,15 +137,9 @@ namespace Core
 
             DatabaseModels.Student student = db.Students.SingleOrDefault(x => x.Id == _id);
 
-            if (student != null)
-            {
-                db.Students.Remove(student);
-                db.SaveChanges();
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException();
-            }
+            db.Students.Remove(student);
+            db.SaveChanges();
+
         }
     }
 }

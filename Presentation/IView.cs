@@ -6,7 +6,7 @@ namespace Presentation
 {
     public interface IView
     {
-        void DisplayData(List<string> data);
+        void DisplayData(string groupId, string name, string age);
         void DisplayError(string errorText);
     }
 }

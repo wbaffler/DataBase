@@ -11,6 +11,17 @@ namespace Core
         {
             obj = s;
         }
+        public Facade()
+        {
+        }
+
+        public double CalculateAvgAge(Curator curator)
+        {
+            BuisnessLogic logic = new BuisnessLogic();
+            logic.FindAvgAge(curator);
+            return logic.AvgAge;
+        }
+
         public void ChangeObject()
         {
             obj.Change();
@@ -24,14 +35,23 @@ namespace Core
             obj.Delete();
         }
 
-        public int NumOfStudentsInGroup()
+        public string FindCuratorByStudent(Student student)
         {
-            throw new NotImplementedException();
+            BuisnessLogic logic = new BuisnessLogic();
+            logic.FindCurator(student);
+            return logic.CuratorName;
+        }
+
+        public int NumOfStudentsInGroup(Student st)
+        {
+            BuisnessLogic logic = new BuisnessLogic();
+            logic.CountStudentsInGroup(st);
+            return logic.NumOfStudents;
         }
 
         public List<string> showObjectData()
         {
-            return obj.Data;
+            return obj.Row;
         }
     }
 }

@@ -10,7 +10,9 @@ namespace Core
         void CreateObject();
         void ChangeObject();
         void DeleteObject();
-        public int NumOfStudentsInGroup();
+        public int NumOfStudentsInGroup(Student st);
+        public double CalculateAvgAge(Curator curator);
+        public string FindCuratorByStudent(Student student);
 
 
     }

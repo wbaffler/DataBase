@@ -12,7 +12,7 @@ namespace Core
         private string _name;
         private string _email;
 
-        public List<string> Data
+        public List<string> Row
         {
             get
             {
@@ -22,6 +22,7 @@ namespace Core
                 if (curator != null)
                 {
                     List<string> temp = new List<string>();
+                    temp.Add(Convert.ToString(curator.Id));
                     temp.Add(Convert.ToString(curator.GroupId));
                     temp.Add(Convert.ToString(curator.Name));
                     temp.Add(Convert.ToString(curator.Email));

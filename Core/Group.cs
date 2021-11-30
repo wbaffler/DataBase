@@ -11,7 +11,7 @@ namespace Core
         private DateTime _creationDate;
         private string _name;
 
-        public List<string> Data
+        public List<string> Row
         {
             get
             {
@@ -21,6 +21,7 @@ namespace Core
                 if (group != null)
                 {
                     List<string> temp = new List<string>();
+                    temp.Add(Convert.ToString(group.Id));
                     temp.Add(Convert.ToString(group.Name));
                     temp.Add(Convert.ToString(group.CreationDate));
                     return temp;

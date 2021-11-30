@@ -49,6 +49,11 @@ namespace Presentation
             this.ChGroupIdTB = new System.Windows.Forms.TextBox();
             this.ChangeBut = new System.Windows.Forms.Button();
             this.DeleteBut = new System.Windows.Forms.Button();
+            this.NumberInGroupBut = new System.Windows.Forms.Button();
+            this.CuratorNameBut = new System.Windows.Forms.Button();
+            this.NumInGroupLabel = new System.Windows.Forms.Label();
+            this.CuratorNameLabel = new System.Windows.Forms.Label();
+            this.SuccessLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -221,11 +226,60 @@ namespace Presentation
             this.DeleteBut.UseVisualStyleBackColor = true;
             this.DeleteBut.Click += new System.EventHandler(this.DeleteBut_Click);
             // 
+            // NumberInGroupBut
+            // 
+            this.NumberInGroupBut.Location = new System.Drawing.Point(36, 347);
+            this.NumberInGroupBut.Name = "NumberInGroupBut";
+            this.NumberInGroupBut.Size = new System.Drawing.Size(318, 83);
+            this.NumberInGroupBut.TabIndex = 20;
+            this.NumberInGroupBut.Text = "Подсчитать студентов в группе";
+            this.NumberInGroupBut.UseVisualStyleBackColor = true;
+            this.NumberInGroupBut.Click += new System.EventHandler(this.NumberInGroupBut_Click);
+            // 
+            // CuratorNameBut
+            // 
+            this.CuratorNameBut.Location = new System.Drawing.Point(431, 347);
+            this.CuratorNameBut.Name = "CuratorNameBut";
+            this.CuratorNameBut.Size = new System.Drawing.Size(318, 83);
+            this.CuratorNameBut.TabIndex = 21;
+            this.CuratorNameBut.Text = "Вывести имя куратора";
+            this.CuratorNameBut.UseVisualStyleBackColor = true;
+            this.CuratorNameBut.Click += new System.EventHandler(this.CuratorNameBut_Click);
+            // 
+            // NumInGroupLabel
+            // 
+            this.NumInGroupLabel.AutoSize = true;
+            this.NumInGroupLabel.Location = new System.Drawing.Point(48, 464);
+            this.NumInGroupLabel.Name = "NumInGroupLabel";
+            this.NumInGroupLabel.Size = new System.Drawing.Size(0, 25);
+            this.NumInGroupLabel.TabIndex = 22;
+            // 
+            // CuratorNameLabel
+            // 
+            this.CuratorNameLabel.AutoSize = true;
+            this.CuratorNameLabel.Location = new System.Drawing.Point(431, 464);
+            this.CuratorNameLabel.Name = "CuratorNameLabel";
+            this.CuratorNameLabel.Size = new System.Drawing.Size(0, 25);
+            this.CuratorNameLabel.TabIndex = 23;
+            // 
+            // SuccessLabel
+            // 
+            this.SuccessLabel.AutoSize = true;
+            this.SuccessLabel.Location = new System.Drawing.Point(179, 13);
+            this.SuccessLabel.Name = "SuccessLabel";
+            this.SuccessLabel.Size = new System.Drawing.Size(0, 25);
+            this.SuccessLabel.TabIndex = 24;
+            // 
             // StudentForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1357, 450);
+            this.ClientSize = new System.Drawing.Size(1357, 609);
+            this.Controls.Add(this.SuccessLabel);
+            this.Controls.Add(this.CuratorNameLabel);
+            this.Controls.Add(this.NumInGroupLabel);
+            this.Controls.Add(this.CuratorNameBut);
+            this.Controls.Add(this.NumberInGroupBut);
             this.Controls.Add(this.DeleteBut);
             this.Controls.Add(this.ChangeBut);
             this.Controls.Add(this.label7);
@@ -275,5 +329,10 @@ namespace Presentation
         private System.Windows.Forms.TextBox ChGroupIdTB;
         private System.Windows.Forms.Button ChangeBut;
         private System.Windows.Forms.Button DeleteBut;
+        private System.Windows.Forms.Button NumberInGroupBut;
+        private System.Windows.Forms.Button CuratorNameBut;
+        private System.Windows.Forms.Label NumInGroupLabel;
+        private System.Windows.Forms.Label CuratorNameLabel;
+        private System.Windows.Forms.Label SuccessLabel;
     }
 }
