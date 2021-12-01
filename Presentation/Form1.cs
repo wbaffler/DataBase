@@ -25,12 +25,14 @@ namespace Presentation
 
         private void GroupBut_Click(object sender, EventArgs e)
         {
-
+            GroupForm newForm = new GroupForm();
+            newForm.Show();
         }
 
         private void CuratorBut_Click(object sender, EventArgs e)
         {
-
+            CuratorForm newForm = new CuratorForm();
+            newForm.Show();
         }
     }
 }

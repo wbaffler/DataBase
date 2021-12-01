@@ -35,8 +35,14 @@ namespace Core
 
         private void ConvertInputId(string id)
         {
+            DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
             if (int.TryParse(id, out int a))
+            {
                 _id = Convert.ToInt32(id);
+                DatabaseModels.Group group = db.Groups.SingleOrDefault(x => x.Id == _id);
+                if (group == null)
+                    throw new ArgumentOutOfRangeException();
+            }
             else
                 throw new FormatException();
         }
@@ -78,7 +84,7 @@ namespace Core
         {
             DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
 
-            DatabaseModels.Group group = new DatabaseModels.Group { Name = _name, CreationDate = DateTime.Now };
+            DatabaseModels.Group group = new DatabaseModels.Group { Name = _name, CreationDate = _creationDate };
             db.Groups.Add(group);
             db.SaveChanges();
 
@@ -88,9 +94,14 @@ namespace Core
         {
             DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
             DatabaseModels.Group group = db.Groups.SingleOrDefault(x => x.Id == _id);
+            DatabaseModels.Curator curator = db.Curators.SingleOrDefault(x => x.GroupId == _id);
+            List<DatabaseModels.Student> students = db.Students.Where(x => x.GroupId == _id).ToList();
 
             if (group != null)
             {
+                db.Students.RemoveRange(students);
+                if (curator != null)
+                    db.Curators.Remove(curator);
                 db.Groups.Remove(group);
                 db.SaveChanges();
             }

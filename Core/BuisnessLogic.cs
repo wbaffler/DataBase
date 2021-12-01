@@ -27,9 +27,13 @@ namespace Core
         public void FindAvgAge(Curator curator)
         {
             DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
-            _avg = (from s in db.Students
-                    where s.GroupId == curator.GroupId
-                    select s).Average(st => st.Age);
+            DatabaseModels.Student student = db.Students.FirstOrDefault(x => x.GroupId == curator.GroupId);
+            if (student != null)
+                _avg = (from s in db.Students
+                        where s.GroupId == curator.GroupId
+                        select s).Average(st => st.Age);
+            else
+                throw new ArgumentNullException();
         }
 
         public void FindCurator(Student student)
@@ -43,6 +47,7 @@ namespace Core
             {
                 _curatorName = curator.Name;
             }
+            //Firstly need to create curators bd
         }
     }
 }

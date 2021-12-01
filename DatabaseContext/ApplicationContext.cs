@@ -10,12 +10,13 @@ namespace DatabaseContext
         public DbSet<DatabaseModels.Curator> Curators { get; set; }
         public ApplicationContext()
         {
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=usersdb;Username=postgres;Password=postgres");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=newdb;Username=postgres;Password=postgres");
         }
 
     }

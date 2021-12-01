@@ -117,12 +117,17 @@ namespace Core
         {
             DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
             DatabaseModels.Group group = db.Groups.SingleOrDefault(x => x.Id == _groupId);
+            DatabaseModels.Curator curator = db.Curators.SingleOrDefault(x => x.GroupId == _groupId);
 
-            if (group != null)
+            if (group != null && curator != null)
             {
                 DatabaseModels.Student student = new DatabaseModels.Student { Name = _name, Age = _age, GroupId = _groupId };
                 db.Students.Add(student);
                 db.SaveChanges();
+            }
+            else if (curator == null && group != null)
+            {
+                throw new Exception("Invalid Curator");
             }
             else
             {

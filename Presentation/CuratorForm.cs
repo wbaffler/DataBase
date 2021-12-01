@@ -1,26 +1,26 @@
-﻿using Presentation.Presenter;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Presentation.Presenter;
+using Core;
 
 namespace Presentation
 {
-    public partial class GroupForm : Form
+    public partial class CuratorForm : Form
     {
-        private PresenterGroup presenter;
-        public GroupForm()
+        private PresenterCurator presenter;
+        public CuratorForm()
         {
             InitializeComponent();
-            presenter = new PresenterGroup(this);
+            presenter = new PresenterCurator(this);
         }
-
         private void CreateBut_Click(object sender, EventArgs e)
         {
-            presenter.Create(NameTB.Text);
+            presenter.Create(GroupIdTB.Text, NameTB.Text, AgeTB.Text);
         }
 
         private void FindBut_Click(object sender, EventArgs e)
@@ -30,26 +30,35 @@ namespace Presentation
 
         private void ChangeBut_Click(object sender, EventArgs e)
         {
-            presenter.Change(NameTB.Text, IdTB.Text);
+            presenter.Change(GroupIdTB.Text, NameTB.Text, AgeTB.Text, IdTB.Text);
         }
 
         private void DeleteBut_Click(object sender, EventArgs e)
         {
             presenter.Delete(IdTB.Text);
         }
-
+        private void AverageBut_Click(object sender, EventArgs e)
+        {
+            presenter.CalculateAverageAge(IdTB.Text);
+        }
         public void DisplayError(string errorText)
         {
             MessageBox.Show(errorText);
         }
 
-        public void DisplayData(string name)
+        public void DisplayData(string groupId, string name, string email)
         {
+            ChGroupIdTB.Text = groupId;
             ChNameTB.Text = name;
+            ChEmailTB.Text = email;
         }
+
+        public string AverageAge { set => AverageAgeLabel.Text = value; }
         public void DisplaySuccess()
         {
             SuccessLabel.Text = "Успешно!";
         }
+
+        
     }
 }

@@ -54,8 +54,14 @@ namespace Core
 
         private void ConvertInputId(string id)
         {
+            DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
             if (int.TryParse(id, out int a))
+            {
                 _id = Convert.ToInt32(id);
+                DatabaseModels.Curator curator = db.Curators.SingleOrDefault(x => x.Id == _id);
+                if (curator == null)
+                    throw new ArgumentOutOfRangeException();
+            }
             else
                 throw new FormatException();
         }
@@ -108,14 +114,17 @@ namespace Core
         public void Create()
         { 
             DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
-            if ((from c in db.Curators
-                 where c.GroupId == _groupId
-                 select c).SingleOrDefault() == null)
+            DatabaseModels.Group group = db.Groups.SingleOrDefault(x => x.Id == _groupId);
+            DatabaseModels.Curator tempCurator = db.Curators.FirstOrDefault(x => x.GroupId == _groupId);
+
+            if (group != null && tempCurator == null)
             {
                 DatabaseModels.Curator curator = new DatabaseModels.Curator { Name = _name, GroupId = _groupId, Email = _email };
                 db.Curators.Add(curator);
                 db.SaveChanges();
             }
+            else if (tempCurator != null && group != null)
+                throw new ArgumentException();
             else
                 throw new Exception();
         }
@@ -124,10 +133,13 @@ namespace Core
         {
             DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
             DatabaseModels.Curator curator = db.Curators.SingleOrDefault(x => x.Id == _id);
+            DatabaseModels.Group group = db.Groups.SingleOrDefault(x => x.Id == curator.Id);
+            //Console.WriteLine(_groupId);
 
             if (curator != null)
             {
                 db.Curators.Remove(curator);
+                db.Groups.Remove(group);
                 db.SaveChanges();
             }
             else

@@ -12,7 +12,7 @@ namespace Presentation
 {
     public partial class StudentForm : Form, IView
     {
-        private Presenter.PresenterStudent presenter;
+        private PresenterStudent presenter;
 
         public StudentForm()
         {

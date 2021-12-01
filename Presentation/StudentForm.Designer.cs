@@ -274,7 +274,7 @@ namespace Presentation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1357, 609);
+            this.ClientSize = new System.Drawing.Size(1327, 551);
             this.Controls.Add(this.SuccessLabel);
             this.Controls.Add(this.CuratorNameLabel);
             this.Controls.Add(this.NumInGroupLabel);

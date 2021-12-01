@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Core;
 
 namespace Presentation.Presenter
 {
@@ -48,9 +47,13 @@ namespace Presentation.Presenter
             {
                 view.DisplayError("Введенные данные не корректны");
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                view.DisplayError("Данный номер группы не существует");
+                if (e.Message == "Invalid group")
+                    view.DisplayError("Данный номер группы не существует");
+                if (e.Message == "Invalid Curator")
+                    view.DisplayError("Сперва добавьте куратора");
+                Console.WriteLine(e.Message);
             }
         }
 
