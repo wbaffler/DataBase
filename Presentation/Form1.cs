@@ -14,24 +14,25 @@ namespace Presentation
     {
         public Form1()
         {
+            db = new DatabaseContext.ApplicationContext();
             InitializeComponent();
         }
-
+        private DatabaseContext.ApplicationContext db;
         private void StudentBut_Click(object sender, EventArgs e)
         {
-            StudentForm newForm = new StudentForm();
+            StudentForm newForm = new StudentForm(db);
             newForm.Show();
         }
 
         private void GroupBut_Click(object sender, EventArgs e)
         {
-            GroupForm newForm = new GroupForm();
+            GroupForm newForm = new GroupForm(db);
             newForm.Show();
         }
 
         private void CuratorBut_Click(object sender, EventArgs e)
         {
-            CuratorForm newForm = new CuratorForm();
+            CuratorForm newForm = new CuratorForm(db);
             newForm.Show();
         }
     }

@@ -12,10 +12,10 @@ namespace Presentation
     public partial class GroupForm : Form
     {
         private PresenterGroup presenter;
-        public GroupForm()
+        public GroupForm(DatabaseContext.ApplicationContext db)
         {
             InitializeComponent();
-            presenter = new PresenterGroup(this);
+            presenter = new PresenterGroup(this, db);
         }
 
         private void CreateBut_Click(object sender, EventArgs e)

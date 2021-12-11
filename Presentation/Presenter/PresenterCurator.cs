@@ -8,10 +8,14 @@ namespace Presentation.Presenter
 
     public class PresenterCurator 
     {
-        public PresenterCurator(CuratorForm Form)
+        public PresenterCurator(CuratorForm Form, DatabaseContext.ApplicationContext d)
         {
             view = Form;
+            db = d;
+            facade = new Facade(db);
         }
+        private Facade facade;
+        private DatabaseContext.ApplicationContext db;
         private readonly CuratorForm view;
         private bool CheckData(string groupId, string name, string email)
         {
@@ -34,7 +38,6 @@ namespace Presentation.Presenter
             {
                 if (CheckData(groupId, name, email) && CheckId(id))
                 {
-                    Facade facade = new Facade();
                     facade.ChangeCurator(Convert.ToInt32(groupId), name, email, Convert.ToInt32(id));
                 }     
             }
@@ -59,7 +62,6 @@ namespace Presentation.Presenter
             {
                 if(CheckData(groupId, name, email))
                 {
-                    Facade facade = new Facade();
                     facade.CreateCurator(Convert.ToInt32(groupId), name, email);
                     view.DisplaySuccess();
                 }      
@@ -84,8 +86,7 @@ namespace Presentation.Presenter
             {
                 if(CheckId(id))
                 {
-                    Facade facade = new Facade();
-                    facade.DeleteObject(Convert.ToInt32(id), new CuratorConnector());
+                    facade.DeleteObject(Convert.ToInt32(id), new CuratorConnector(db));
                 }
                 
             }
@@ -105,10 +106,10 @@ namespace Presentation.Presenter
             {
                 if (CheckId(id))
                 {
-                    Facade facade = new Facade();
-                    view.DisplayData(facade.showObjectData(Convert.ToInt32(id), new CuratorConnector())[1],
-                        facade.showObjectData(Convert.ToInt32(id), new CuratorConnector())[2],
-                        facade.showObjectData(Convert.ToInt32(id), new CuratorConnector())[3]);
+                    
+                    view.DisplayData(facade.showObjectData(Convert.ToInt32(id), new CuratorConnector(db))[1],
+                        facade.showObjectData(Convert.ToInt32(id), new CuratorConnector(db))[2],
+                        facade.showObjectData(Convert.ToInt32(id), new CuratorConnector(db))[3]);
                 }
             }
             catch (ArgumentOutOfRangeException)
@@ -127,7 +128,6 @@ namespace Presentation.Presenter
             {
                 if(CheckId(id))
                 {
-                    Facade facade = new Facade();
                     double avg = facade.CalculateAvgAge(Convert.ToInt32(id));
                     view.AverageAge = Convert.ToString(avg);
                 }

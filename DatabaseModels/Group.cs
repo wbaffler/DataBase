@@ -18,6 +18,8 @@ namespace DatabaseModels
         public string Name { get; set; }
         [Required]
         public DateTime CreationDate { get; set; }
+        public Curator Curator { get; set; }
+        public List<Student> Students { get; set; } = new List<Student>();
 
     }
 }

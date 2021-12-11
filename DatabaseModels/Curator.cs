@@ -22,6 +22,7 @@ namespace DatabaseModels
         public string Name { get; set; }
         [Required]
         public string Email { get; set; }
+        public Group Group { get; set; }
     }
-    //https://metanit.com/sharp/entityframeworkcore/2.9.php
+
 }

@@ -12,12 +12,14 @@ namespace Presentation
 {
     public partial class CuratorForm : Form
     {
-        private PresenterCurator presenter;
-        public CuratorForm()
+        
+        public CuratorForm(DatabaseContext.ApplicationContext db)
         {
             InitializeComponent();
-            presenter = new PresenterCurator(this);
+            presenter = new PresenterCurator(this, db);
+
         }
+        private PresenterCurator presenter;
         private void CreateBut_Click(object sender, EventArgs e)
         {
             presenter.Create(GroupIdTB.Text, NameTB.Text, AgeTB.Text);

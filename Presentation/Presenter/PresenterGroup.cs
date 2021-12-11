@@ -7,10 +7,14 @@ namespace Presentation.Presenter
 {
     public class PresenterGroup
     {
-        public PresenterGroup(GroupForm Form)
+        public PresenterGroup(GroupForm Form, DatabaseContext.ApplicationContext d)
         {
             view = Form;
+            db = d;
+            facade = new Facade(db);
         }
+        private Facade facade;
+        private DatabaseContext.ApplicationContext db;
         private readonly GroupForm view;
         private bool CheckData(string name)
         {
@@ -33,7 +37,6 @@ namespace Presentation.Presenter
             {
                 if(CheckData(name) && CheckId(id))
                 {
-                    Facade facade = new Facade();
                     facade.ChangeGroup(name, Convert.ToInt32(id));
                 }
             }
@@ -45,10 +48,6 @@ namespace Presentation.Presenter
             {
                 view.DisplayError("Введенные данные не корректны");
             }
-            catch (Exception e)
-            {
-                view.DisplayError("Данного номера группы не существует");
-            }
 
         }
 
@@ -58,7 +57,6 @@ namespace Presentation.Presenter
             {
                 if(CheckData(name))
                 {
-                    Facade facade = new Facade();
                     facade.CreateGroup(name, DateTime.Now);
                     view.DisplaySuccess();
                 }                
@@ -80,8 +78,7 @@ namespace Presentation.Presenter
             {
                 if (CheckId(id))
                 {
-                    Facade facade = new Facade();
-                    facade.DeleteObject(Convert.ToInt32(id), new GroupConnector());
+                    facade.DeleteObject(Convert.ToInt32(id), new GroupConnector(db));
                 }
             }
             catch (ArgumentOutOfRangeException)
@@ -99,9 +96,8 @@ namespace Presentation.Presenter
             try
             {
                 if (CheckId(id))
-                {
-                    Facade facade = new Facade();
-                    view.DisplayData(facade.showObjectData(Convert.ToInt32(id), new GroupConnector())[1]);
+                {                    
+                    view.DisplayData(facade.showObjectData(Convert.ToInt32(id), new GroupConnector(db))[1]);
                 }
             }
             catch (ArgumentOutOfRangeException)

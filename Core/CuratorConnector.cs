@@ -8,9 +8,9 @@ namespace Core
 {
     public class CuratorConnector : IConnector
     {
-        public CuratorConnector()
+        public CuratorConnector(DatabaseContext.ApplicationContext d)
         {
-            db = new DatabaseContext.ApplicationContext();
+            db = d;
         }
         private DatabaseContext.ApplicationContext db;
         public List<string> Row (int id)
@@ -31,19 +31,6 @@ namespace Core
                 throw new ArgumentOutOfRangeException();
             }           
         }
-        public int GroupId(int id)
-        {
-            Curator curator = db.Curators.SingleOrDefault(x => x.Id == id);
-
-            if (curator != null)
-            {
-                return curator.GroupId;
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-        }
         public void Change(int groupId, string name, string email, int id)
         {            
             Curator curator = db.Curators.SingleOrDefault(x => x.Id == id);
@@ -62,30 +49,18 @@ namespace Core
 
         public void Create(int groupId, string name, string email)
         { 
-            Group group = db.Groups.SingleOrDefault(x => x.Id == groupId);
-            Curator findCurator = db.Curators.FirstOrDefault(x => x.GroupId == groupId);
-
-            if (group != null && findCurator == null)
-            {
-                Curator curator = new Curator { Name = name, GroupId = groupId, Email = email };
-                db.Curators.Add(curator);
-                db.SaveChanges();
-            }
-            else if (findCurator != null && group != null)
-                throw new ArgumentException();
-            else
-                throw new Exception();
+            Curator curator = new Curator { Name = name, GroupId = groupId, Email = email };
+            db.Curators.Add(curator);
+            db.SaveChanges();
         }
 
         public void Delete(int id)
         {
             Curator curator = db.Curators.SingleOrDefault(x => x.Id == id);
-            Group group = db.Groups.SingleOrDefault(x => x.Id == curator.Id);
 
             if (curator != null)
             {
                 db.Curators.Remove(curator);
-                db.Groups.Remove(group);
                 db.SaveChanges();
             }
             else

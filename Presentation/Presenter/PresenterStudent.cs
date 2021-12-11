@@ -7,10 +7,14 @@ namespace Presentation.Presenter
 {
     public class PresenterStudent 
     {        
-        public PresenterStudent(StudentForm Form)
+        public PresenterStudent(StudentForm Form, DatabaseContext.ApplicationContext d)
         {
             view = Form;
+            db = d;
+            facade = new Facade(d);
         }
+        private DatabaseContext.ApplicationContext db;
+        private Facade facade;
         private readonly StudentForm view;
         private bool CheckData(string groupId, string name, string age)
         {
@@ -24,7 +28,7 @@ namespace Presentation.Presenter
             if (int.TryParse(id, out int d2))
                 return true;
             else
-                throw new ArgumentOutOfRangeException();
+                throw new FormatException();
         }
         public void Change(string groupId, string name, string age, string id)
         {
@@ -32,7 +36,6 @@ namespace Presentation.Presenter
             {                
                 if (CheckData(groupId, name, age) && CheckId(id))
                 {
-                    Facade facade = new Facade();
                     facade.ChangeStudent(Convert.ToInt32(groupId), name, Convert.ToInt32(age), Convert.ToInt32(id));
                 }                   
             }
@@ -57,7 +60,6 @@ namespace Presentation.Presenter
             {
                 if(CheckData(groupId, name, age))
                 {
-                    Facade facade = new Facade();
                     facade.CreateStudent(Convert.ToInt32(groupId), name, Convert.ToInt32(age));
                     view.DisplaySuccess();
                 }               
@@ -68,10 +70,7 @@ namespace Presentation.Presenter
             }
             catch (Exception e)
             {
-                if (e.Message == "Invalid group")
-                    view.DisplayError("Данный номер группы не существует");
-                if (e.Message == "Invalid Curator")
-                    view.DisplayError("Сперва добавьте куратора");
+                view.DisplayError("Данный номер группы не существует");
                 Console.WriteLine(e.Message);
             }
         }
@@ -82,8 +81,7 @@ namespace Presentation.Presenter
             {
                 if(CheckId(id))
                 {
-                    Facade facade = new Facade();
-                    facade.DeleteObject(Convert.ToInt32(id), new StudentConnector());
+                    facade.DeleteObject(Convert.ToInt32(id), new StudentConnector(db));
                 }
                 
             }
@@ -103,10 +101,9 @@ namespace Presentation.Presenter
             {
                 if(CheckId(id))
                 {
-                    Facade facade = new Facade();
-                    view.DisplayData(facade.showObjectData(Convert.ToInt32(id), new StudentConnector())[1],
-                        facade.showObjectData(Convert.ToInt32(id), new StudentConnector())[2], 
-                        facade.showObjectData(Convert.ToInt32(id), new StudentConnector())[3]);
+                    view.DisplayData(facade.showObjectData(Convert.ToInt32(id), new StudentConnector(db))[1],
+                        facade.showObjectData(Convert.ToInt32(id), new StudentConnector(db))[2], 
+                        facade.showObjectData(Convert.ToInt32(id), new StudentConnector(db))[3]);
                 }                
             }
             catch (ArgumentOutOfRangeException)
@@ -125,13 +122,12 @@ namespace Presentation.Presenter
             {
                 if(CheckId(id))
                 {
-                    Facade facade = new Facade();
                     int num = facade.NumOfStudentsInGroup(Convert.ToInt32(id));
                     view.NumberOfStudents = Convert.ToString(num);
                 }
                 
             }
-            catch (ArgumentOutOfRangeException)
+            catch (ArgumentNullException)
             {
                 view.DisplayError("Неверный ID");
             }
@@ -146,12 +142,14 @@ namespace Presentation.Presenter
             {
                 if (CheckId(id))
                 {
-                    Facade facade = new Facade();
                     string curName = facade.FindCuratorByStudent(Convert.ToInt32(id));
-                    view.CuratorName = curName;
+                    if (curName != null)
+                        view.CuratorName = curName;
+                    else
+                        view.CuratorName = "Куратор у заданной группы отсутствует";
                 }               
             }           
-            catch (ArgumentOutOfRangeException)
+            catch (ArgumentNullException)
             {
                 view.DisplayError("Неверный ID");
             }

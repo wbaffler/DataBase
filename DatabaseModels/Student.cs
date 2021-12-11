@@ -19,6 +19,7 @@ namespace DatabaseModels
         public string Name { get; set; }
         [Required]
         public int Age { get; set; }
+        public Group Group { get; set; }
 
     }
 }

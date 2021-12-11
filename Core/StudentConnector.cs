@@ -8,9 +8,9 @@ namespace Core
 {
     public class StudentConnector : IConnector
     {
-        public StudentConnector()
+        public StudentConnector(DatabaseContext.ApplicationContext d)
         {
-            db = new DatabaseContext.ApplicationContext();
+            db = d;
         }
         private DatabaseContext.ApplicationContext db;
         public List<string> Row(int id)
@@ -34,8 +34,7 @@ namespace Core
         public void Change(int groupId, string name, int age, int id)
         {
             Student student = db.Students.SingleOrDefault(x => x.Id == id);
-            Group group = db.Groups.SingleOrDefault(x => x.Id == groupId);
-            if (group != null)
+            if (student != null)
             {
                 student.Age = age;
                 student.GroupId = groupId;
@@ -44,39 +43,24 @@ namespace Core
             }
             else
             {
-                throw new Exception("Invalid group");
+                throw new ArgumentOutOfRangeException();
             }
         }
 
         public void Create(int groupId, string name, int age)
         {
-            DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
-            Group group = db.Groups.SingleOrDefault(x => x.Id == groupId);
-            Curator curator = db.Curators.SingleOrDefault(x => x.GroupId == groupId);
 
-            if (group != null && curator != null)
-            {
-                Student student = new DatabaseModels.Student { Name = name, Age = age, GroupId = groupId };
-                db.Students.Add(student);
-                db.SaveChanges();
-            }
-            else if (curator == null && group != null)
-            {
-                throw new Exception("Invalid Curator");
-            }
-            else
-            {
-                throw new Exception("Invalid group");
-            }
-
+            Student student = new Student { Name = name, Age = age, GroupId = groupId };
+            db.Students.Add(student);
+            db.SaveChanges();
         }
 
         public void Delete(int id)
         {
             Student student = db.Students.SingleOrDefault(x => x.Id == id);
-
             db.Students.Remove(student);
             db.SaveChanges();
         }
+ 
     }
 }

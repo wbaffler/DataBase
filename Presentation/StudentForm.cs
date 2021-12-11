@@ -14,10 +14,10 @@ namespace Presentation
     {
         private PresenterStudent presenter;
 
-        public StudentForm()
+        public StudentForm(DatabaseContext.ApplicationContext db)
         {
             InitializeComponent();
-            presenter = new PresenterStudent(this);
+            presenter = new PresenterStudent(this, db);
         }
 
         private void CreateBut_Click(object sender, EventArgs e)

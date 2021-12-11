@@ -8,9 +8,9 @@ namespace Core
 {
     public class GroupConnector : IConnector
     {
-        public GroupConnector()
+        public GroupConnector(DatabaseContext.ApplicationContext d)
         {
-            db = new DatabaseContext.ApplicationContext();
+            db = d;
         }
         private DatabaseContext.ApplicationContext db;
         public List<string> Row (int id)
@@ -48,7 +48,7 @@ namespace Core
 
         public void Create(string name, DateTime creationDate)
         {
-            DatabaseModels.Group group = new DatabaseModels.Group { Name = name, CreationDate = creationDate };
+            Group group = new Group { Name = name, CreationDate = creationDate };
             db.Groups.Add(group);
             db.SaveChanges();
 
@@ -57,14 +57,8 @@ namespace Core
         public void Delete(int id)
         {
             Group group = db.Groups.SingleOrDefault(x => x.Id == id);
-            Curator curator = db.Curators.SingleOrDefault(x => x.GroupId == id);
-            List<Student> students = db.Students.Where(x => x.GroupId == id).ToList();
-
             if (group != null)
             {
-                db.Students.RemoveRange(students);
-                if (curator != null)
-                    db.Curators.Remove(curator);
                 db.Groups.Remove(group);
                 db.SaveChanges();
             }

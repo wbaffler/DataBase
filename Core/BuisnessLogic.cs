@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using DatabaseModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace Core
 {
     public class BuisnessLogic : IBuisnessLogic
     {
-        DatabaseContext.ApplicationContext db;
-        public BuisnessLogic()
+        
+        public BuisnessLogic(DatabaseContext.ApplicationContext d)
         {
-            db = new DatabaseContext.ApplicationContext();
+            db = d;
         }
+        private DatabaseContext.ApplicationContext db;
         private int _count = 0;
         private double _avg = 0;
         private string _curatorName;
@@ -22,34 +24,48 @@ namespace Core
 
         public double AvgAge => _avg;
 
-        public void CountStudentsInGroup(int id)
+        public void CountStudentsInGroup(int studentId)
         {
-            Student student = db.Students.FirstOrDefault(x => x.Id == id);
-            _count = (from s in db.Students
-                      where s.GroupId == student.GroupId
-                      select s).Count();
-        }
-
-        public void FindAvgAge(int id)
-        {
-            Curator curator = db.Curators.FirstOrDefault(x => x.Id == id);
-            Student student = db.Students.FirstOrDefault(x => x.GroupId == curator.GroupId);
+            Student student = db.Students.FirstOrDefault(x => x.Id == studentId);
+            
             if (student != null)
-                _avg = (from s in db.Students
-                        where s.GroupId == curator.GroupId
-                        select s).Average(st => st.Age);
+                _count = (from s in db.Students
+                          where s.GroupId == student.GroupId
+                          select s).Count();               
             else
                 throw new ArgumentNullException();
         }
 
-        public void FindCurator(int id)
+        public void FindAvgAge(int curatorId)
         {
-            Student student = db.Students.FirstOrDefault(x => x.Id == id);
-            Curator curator = db.Curators.SingleOrDefault(x => x.GroupId == student.GroupId);
+            Curator curator = db.Curators.FirstOrDefault(x => x.Id == curatorId);
             if (curator != null)
             {
-                _curatorName = curator.Name;
+                Student student = db.Students.FirstOrDefault(x => x.GroupId == curator.GroupId);
+                if (student != null)
+                    _avg = (from s in db.Students
+                            where s.GroupId == curator.GroupId
+                            select s).Average(st => st.Age);
+                else
+                    throw new ArgumentNullException();
             }
+            else
+                throw new ArgumentOutOfRangeException();
+
+
+        }
+
+        public void FindCurator(int studentId)
+        {
+            Student student = db.Students.FirstOrDefault(x => x.Id == studentId);            
+            if (student != null)
+            {
+                Curator curator = db.Curators.SingleOrDefault(x => x.GroupId == student.GroupId);
+                if (curator != null)
+                    _curatorName = curator.Name;
+            }                           
+            else
+                throw new ArgumentNullException();
         }
     }
 }
