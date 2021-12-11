@@ -8,11 +8,11 @@ namespace Core
     {
         List<string> showObjectData();
         void CreateObject();
-        void ChangeObject();
+        void ChangeStudent();
         void DeleteObject();
-        public int NumOfStudentsInGroup(Student st);
-        public double CalculateAvgAge(Curator curator);
-        public string FindCuratorByStudent(Student student);
+        public int NumOfStudentsInGroup(StudentConnector st);
+        public double CalculateAvgAge(CuratorConnector curator);
+        public string FindCuratorByStudent(StudentConnector student);
 
 
     }

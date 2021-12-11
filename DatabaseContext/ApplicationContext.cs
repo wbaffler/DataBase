@@ -10,7 +10,7 @@ namespace DatabaseContext
         public DbSet<DatabaseModels.Curator> Curators { get; set; }
         public ApplicationContext()
         {
-            //Database.EnsureDeleted();
+           // Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 

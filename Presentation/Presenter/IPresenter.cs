@@ -6,9 +6,9 @@ namespace Presentation.Presenter
 {
     public interface IPresenter
     {
-        void Create(Core.IObject obj);
-        void Change(Core.IObject obj);
-        void Delete(Core.IObject obj);
-        void Show(Core.IObject obj);
+        void Create(Core.IConnector obj);
+        void Change(Core.IConnector obj);
+        void Delete(Core.IConnector obj);
+        void Show(Core.IConnector obj);
     }
 }

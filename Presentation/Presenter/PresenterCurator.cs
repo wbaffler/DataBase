@@ -8,18 +8,35 @@ namespace Presentation.Presenter
 
     public class PresenterCurator 
     {
-        private readonly CuratorForm view;
         public PresenterCurator(CuratorForm Form)
         {
             view = Form;
+        }
+        private readonly CuratorForm view;
+        private bool CheckData(string groupId, string name, string email)
+        {
+            if (int.TryParse(groupId, out int d1) && name.Length != 0)
+                return true;
+            else
+                throw new FormatException();
+        }
+        private bool CheckId(string id)
+        {
+            if (int.TryParse(id, out int d2))
+                return true;
+            else
+                throw new ArgumentOutOfRangeException();
         }
 
         public void Change(string groupId, string name, string email, string id)
         {
             try
             {
-                Core.Facade facade = new Core.Facade(new Curator(groupId, name, email, id));
-                facade.ChangeObject();
+                if (CheckData(groupId, name, email) && CheckId(id))
+                {
+                    Facade facade = new Facade();
+                    facade.ChangeCurator(Convert.ToInt32(groupId), name, email, Convert.ToInt32(id));
+                }     
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -40,9 +57,12 @@ namespace Presentation.Presenter
         {
             try
             {
-                Core.Facade facade = new Core.Facade(new Curator(groupId, name, email));
-                facade.CreateObject();
-                view.DisplaySuccess();
+                if(CheckData(groupId, name, email))
+                {
+                    Facade facade = new Facade();
+                    facade.CreateCurator(Convert.ToInt32(groupId), name, email);
+                    view.DisplaySuccess();
+                }      
             }
             catch (FormatException)
             {
@@ -62,8 +82,12 @@ namespace Presentation.Presenter
         {
             try
             {
-                Core.Facade facade = new Core.Facade(new Curator(id));
-                facade.DeleteObject();
+                if(CheckId(id))
+                {
+                    Facade facade = new Facade();
+                    facade.DeleteObject(Convert.ToInt32(id), new CuratorConnector());
+                }
+                
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -79,8 +103,13 @@ namespace Presentation.Presenter
         {
             try
             {
-                Core.Facade facade = new Core.Facade(new Curator(id));
-                view.DisplayData(facade.showObjectData()[1], facade.showObjectData()[2], facade.showObjectData()[3]);
+                if (CheckId(id))
+                {
+                    Facade facade = new Facade();
+                    view.DisplayData(facade.showObjectData(Convert.ToInt32(id), new CuratorConnector())[1],
+                        facade.showObjectData(Convert.ToInt32(id), new CuratorConnector())[2],
+                        facade.showObjectData(Convert.ToInt32(id), new CuratorConnector())[3]);
+                }
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -96,10 +125,13 @@ namespace Presentation.Presenter
         {
             try
             {
-                Core.Facade facade = new Core.Facade();
-                Curator curator = new Curator(id);
-                double avg = facade.CalculateAvgAge(curator);
-                view.AverageAge = Convert.ToString(avg);
+                if(CheckId(id))
+                {
+                    Facade facade = new Facade();
+                    double avg = facade.CalculateAvgAge(Convert.ToInt32(id));
+                    view.AverageAge = Convert.ToString(avg);
+                }
+                
             }
             catch (ArgumentNullException)
             {

@@ -7,18 +7,35 @@ namespace Presentation.Presenter
 {
     public class PresenterGroup
     {
-        private readonly GroupForm view;
         public PresenterGroup(GroupForm Form)
         {
             view = Form;
+        }
+        private readonly GroupForm view;
+        private bool CheckData(string name)
+        {
+            if (name.Length != 0)
+                return true;
+            else
+                throw new FormatException();
+        }
+        private bool CheckId(string id)
+        {
+            if (int.TryParse(id, out int d2))
+                return true;
+            else
+                throw new ArgumentOutOfRangeException();
         }
 
         public void Change(string name, string id)
         {
             try
             {
-                Core.Facade facade = new Core.Facade(new Group(name, DateTime.Now, id));
-                facade.ChangeObject();
+                if(CheckData(name) && CheckId(id))
+                {
+                    Facade facade = new Facade();
+                    facade.ChangeGroup(name, Convert.ToInt32(id));
+                }
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -31,8 +48,6 @@ namespace Presentation.Presenter
             catch (Exception e)
             {
                 view.DisplayError("Данного номера группы не существует");
-                
-                //Console.WriteLine(e.Message);
             }
 
         }
@@ -41,9 +56,12 @@ namespace Presentation.Presenter
         {
             try
             {
-                Core.Facade facade = new Core.Facade(new Group(name, DateTime.Now));
-                facade.CreateObject();
-                view.DisplaySuccess();
+                if(CheckData(name))
+                {
+                    Facade facade = new Facade();
+                    facade.CreateGroup(name, DateTime.Now);
+                    view.DisplaySuccess();
+                }                
             }
             catch (FormatException)
             {
@@ -60,8 +78,11 @@ namespace Presentation.Presenter
         {
             try
             {
-                Core.Facade facade = new Core.Facade(new Group(id));
-                facade.DeleteObject();
+                if (CheckId(id))
+                {
+                    Facade facade = new Facade();
+                    facade.DeleteObject(Convert.ToInt32(id), new GroupConnector());
+                }
             }
             catch (ArgumentOutOfRangeException)
             {
@@ -77,8 +98,11 @@ namespace Presentation.Presenter
         {
             try
             {
-                Core.Facade facade = new Core.Facade(new Group(id));
-                view.DisplayData(facade.showObjectData()[1]);
+                if (CheckId(id))
+                {
+                    Facade facade = new Facade();
+                    view.DisplayData(facade.showObjectData(Convert.ToInt32(id), new GroupConnector())[1]);
+                }
             }
             catch (ArgumentOutOfRangeException)
             {

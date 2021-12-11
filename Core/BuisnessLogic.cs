@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using DatabaseModels;
 
 namespace Core
 {
     public class BuisnessLogic : IBuisnessLogic
     {
+        DatabaseContext.ApplicationContext db;
+        public BuisnessLogic()
+        {
+            db = new DatabaseContext.ApplicationContext();
+        }
         private int _count = 0;
         private double _avg = 0;
         private string _curatorName;
@@ -16,18 +22,18 @@ namespace Core
 
         public double AvgAge => _avg;
 
-        public void CountStudentsInGroup(Student student)
+        public void CountStudentsInGroup(int id)
         {
-            DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
+            Student student = db.Students.FirstOrDefault(x => x.Id == id);
             _count = (from s in db.Students
                       where s.GroupId == student.GroupId
                       select s).Count();
         }
 
-        public void FindAvgAge(Curator curator)
+        public void FindAvgAge(int id)
         {
-            DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
-            DatabaseModels.Student student = db.Students.FirstOrDefault(x => x.GroupId == curator.GroupId);
+            Curator curator = db.Curators.FirstOrDefault(x => x.Id == id);
+            Student student = db.Students.FirstOrDefault(x => x.GroupId == curator.GroupId);
             if (student != null)
                 _avg = (from s in db.Students
                         where s.GroupId == curator.GroupId
@@ -36,18 +42,14 @@ namespace Core
                 throw new ArgumentNullException();
         }
 
-        public void FindCurator(Student student)
+        public void FindCurator(int id)
         {
-            DatabaseContext.ApplicationContext db = new DatabaseContext.ApplicationContext();
-            DatabaseModels.Curator curator = db.Curators.SingleOrDefault(x => x.GroupId == student.GroupId);
-            /*_curatorName = (from c in db.Curators
-                            where c.GroupId == student.GroupId
-                            select c.Name).ToString();*/
+            Student student = db.Students.FirstOrDefault(x => x.Id == id);
+            Curator curator = db.Curators.SingleOrDefault(x => x.GroupId == student.GroupId);
             if (curator != null)
             {
                 _curatorName = curator.Name;
             }
-            //Firstly need to create curators bd
         }
     }
 }

@@ -3,55 +3,70 @@ using System.Collections.Generic;
 
 namespace Core
 {
-    public class Facade : IFacade
+    public class Facade// : IFacade
     {
-        private IObject obj;
-
-        public Facade(IObject s)
-        {
-            obj = s;
-        }
         public Facade()
         {
         }
 
-        public double CalculateAvgAge(Curator curator)
+        public void ChangeStudent(int groupId, string name, int age, int id)
         {
-            BuisnessLogic logic = new BuisnessLogic();
-            logic.FindAvgAge(curator);
-            return logic.AvgAge;
+            StudentConnector studentConnector = new StudentConnector();
+            studentConnector.Change(groupId, name, age, id);
+        }
+        public void ChangeGroup(string name, int id)
+        {
+            GroupConnector groupConnector = new GroupConnector();
+            groupConnector.Change(name, id);
+        }
+        public void ChangeCurator(int groupId, string name, string email, int id)
+        {
+            CuratorConnector curatorConnector = new CuratorConnector();
+            curatorConnector.Change(groupId, name, email, id);
+        }
+        public void CreateStudent(int groupId, string name, int age)
+        {
+            StudentConnector studentConnector = new StudentConnector();
+            studentConnector.Create(groupId, name, age);
+        }
+        public void CreateGroup(string name, DateTime creationDate)
+        {
+            GroupConnector groupConnector = new GroupConnector();
+            groupConnector.Create(name, creationDate);
+        }
+        public void CreateCurator(int groupId, string name, string email)
+        {
+            CuratorConnector curatorConnector = new CuratorConnector();
+            curatorConnector.Create(groupId, name, email);
+        }
+        public void DeleteObject(int id, IConnector connector)
+        {
+            connector.Delete(id);
         }
 
-        public void ChangeObject()
-        {
-            obj.Change();
-        }
-        public void CreateObject()
-        {
-            obj.Create();
-        }
-        public void DeleteObject()
-        {
-            obj.Delete();
-        }
-
-        public string FindCuratorByStudent(Student student)
+        public string FindCuratorByStudent(int id)
         {
             BuisnessLogic logic = new BuisnessLogic();
-            logic.FindCurator(student);
+            logic.FindCurator(id);
             return logic.CuratorName;
         }
 
-        public int NumOfStudentsInGroup(Student st)
+        public int NumOfStudentsInGroup(int id)
         {
             BuisnessLogic logic = new BuisnessLogic();
-            logic.CountStudentsInGroup(st);
+            logic.CountStudentsInGroup(id);
             return logic.NumOfStudents;
         }
-
-        public List<string> showObjectData()
+        public double CalculateAvgAge(int id)
         {
-            return obj.Row;
+            BuisnessLogic logic = new BuisnessLogic();
+            logic.FindAvgAge(id);
+            return logic.AvgAge;
+        }
+
+        public List<string> showObjectData(int id, IConnector connector)
+        {
+            return connector.Row(id);
         }
     }
 }
