@@ -29,7 +29,19 @@ namespace Core
             {
                 throw new ArgumentOutOfRangeException();
             }
-            
+        }
+        public List<List<string>> DataMatrix()
+        {
+            List<List<string>> matr = new List<List<string>>();
+            foreach (var group in db.Groups)
+            {
+                List<string> list = new List<string>();
+                list.Add(Convert.ToString(group.Id));
+                list.Add(Convert.ToString(group.Name));
+                list.Add(Convert.ToString(group.CreationDate));
+                matr.Add(list);
+            }
+            return matr;
         }
         public void Change(string name, int id)
         {

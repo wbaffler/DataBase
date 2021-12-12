@@ -15,25 +15,31 @@ namespace Presentation
         public Form1()
         {
             db = new DatabaseContext.ApplicationContext();
+            newStudentForm = new StudentForm(db);
+            newGroupForm = new GroupForm(db);
+            newCuratorForm = new CuratorForm(db);
             InitializeComponent();
         }
+        private CuratorForm newCuratorForm;
+        private GroupForm newGroupForm;
+        private StudentForm newStudentForm;
         private DatabaseContext.ApplicationContext db;
         private void StudentBut_Click(object sender, EventArgs e)
         {
-            StudentForm newForm = new StudentForm(db);
-            newForm.Show();
+
+            newStudentForm.Show();
         }
 
         private void GroupBut_Click(object sender, EventArgs e)
         {
-            GroupForm newForm = new GroupForm(db);
-            newForm.Show();
+
+            newGroupForm.Show();
         }
 
         private void CuratorBut_Click(object sender, EventArgs e)
         {
-            CuratorForm newForm = new CuratorForm(db);
-            newForm.Show();
+
+            newCuratorForm.Show();
         }
     }
 }

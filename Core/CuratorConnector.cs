@@ -31,6 +31,20 @@ namespace Core
                 throw new ArgumentOutOfRangeException();
             }           
         }
+        public List<List<string>> DataMatrix()
+        {
+            List<List<string>> matr = new List<List<string>>();
+            foreach (var curator in db.Curators)
+            {
+                List<string> list = new List<string>();
+                list.Add(Convert.ToString(curator.Id));
+                list.Add(Convert.ToString(curator.GroupId));
+                list.Add(Convert.ToString(curator.Name));
+                list.Add(Convert.ToString(curator.Email));
+                matr.Add(list);
+            }
+            return matr;
+        }
         public void Change(int groupId, string name, string email, int id)
         {            
             Curator curator = db.Curators.SingleOrDefault(x => x.Id == id);
@@ -48,10 +62,16 @@ namespace Core
         }
 
         public void Create(int groupId, string name, string email)
-        { 
-            Curator curator = new Curator { Name = name, GroupId = groupId, Email = email };
-            db.Curators.Add(curator);
-            db.SaveChanges();
+        {
+            Group group = db.Groups.SingleOrDefault(x => x.Id == groupId);
+            if (group != null)
+            {
+                Curator curator = new Curator { Name = name, GroupId = groupId, Email = email };
+                db.Curators.Add(curator);
+                db.SaveChanges();
+            }
+            else
+                throw new Exception();
         }
 
         public void Delete(int id)
@@ -68,5 +88,6 @@ namespace Core
                 throw new ArgumentOutOfRangeException();
             }
         }
+
     }
 }

@@ -37,6 +37,7 @@ namespace Presentation.Presenter
                 if (CheckData(groupId, name, age) && CheckId(id))
                 {
                     facade.ChangeStudent(Convert.ToInt32(groupId), name, Convert.ToInt32(age), Convert.ToInt32(id));
+                    
                 }                   
             }
             catch (ArgumentOutOfRangeException)
@@ -60,7 +61,7 @@ namespace Presentation.Presenter
             {
                 if(CheckData(groupId, name, age))
                 {
-                    facade.CreateStudent(Convert.ToInt32(groupId), name, Convert.ToInt32(age));
+                    facade.CreateStudent(Convert.ToInt32(groupId), name, Convert.ToInt32(age));                    
                     view.DisplaySuccess();
                 }               
             }
@@ -82,6 +83,7 @@ namespace Presentation.Presenter
                 if(CheckId(id))
                 {
                     facade.DeleteObject(Convert.ToInt32(id), new StudentConnector(db));
+                    GetDataGrid();
                 }
                 
             }
@@ -157,6 +159,11 @@ namespace Presentation.Presenter
             {
                 view.DisplayError("Введенные данные не корректны");
             }
+        }
+
+        public void GetDataGrid()
+        {
+            view.UpdGrid(facade.showAllObjectsData(new StudentConnector(db)));
         }
 
     }

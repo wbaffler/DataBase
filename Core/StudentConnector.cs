@@ -20,9 +20,9 @@ namespace Core
             {
                 List<string> temp = new List<string>();
                 temp.Add(Convert.ToString(student.Id));
-                temp.Add(Convert.ToString(student.GroupId));
-                temp.Add(Convert.ToString(student.Age));
+                temp.Add(Convert.ToString(student.GroupId)); 
                 temp.Add(Convert.ToString(student.Name));
+                temp.Add(Convert.ToString(student.Age));
                 return temp;
             }
             else
@@ -30,6 +30,21 @@ namespace Core
                 throw new ArgumentOutOfRangeException();
             }
             
+        }
+
+        public List<List<string>> DataMatrix()
+        {
+            List<List<string>> matr = new List<List<string>>();
+            foreach (var student in db.Students)
+            {
+                List<string> list = new List<string>();
+                list.Add(Convert.ToString(student.Id));
+                list.Add(Convert.ToString(student.GroupId));                
+                list.Add(Convert.ToString(student.Name));
+                list.Add(Convert.ToString(student.Age));
+                matr.Add(list);
+            }
+            return matr;  
         }
         public void Change(int groupId, string name, int age, int id)
         {
@@ -49,10 +64,18 @@ namespace Core
 
         public void Create(int groupId, string name, int age)
         {
-
-            Student student = new Student { Name = name, Age = age, GroupId = groupId };
-            db.Students.Add(student);
-            db.SaveChanges();
+            //db = new DatabaseContext.ApplicationContext();
+            Group group = db.Groups.SingleOrDefault(x => x.Id == groupId);
+            if (group != null)
+            {
+                Student student = new Student { Name = name, Age = age, GroupId = groupId };
+                db.Students.Add(student);
+                db.SaveChanges();
+            }
+            else
+                throw new Exception();
+            
+            
         }
 
         public void Delete(int id)
@@ -61,6 +84,7 @@ namespace Core
             db.Students.Remove(student);
             db.SaveChanges();
         }
- 
+
+        
     }
 }

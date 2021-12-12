@@ -70,5 +70,9 @@ namespace Core
         {
             return connector.Row(id);
         }
+        public List<List<string>> showAllObjectsData(IConnector connector)
+        {
+            return connector.DataMatrix();
+        }
     }
 }

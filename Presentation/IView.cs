@@ -8,5 +8,6 @@ namespace Presentation
     {
         void DisplayData(string groupId, string name, string age);
         void DisplayError(string errorText);
+        //public void FillGrid(List<List<string>> matrix);
     }
 }
