@@ -43,10 +43,18 @@ namespace Presentation.Presenter
             catch (ArgumentOutOfRangeException)
             {
                 view.DisplayError("Неверный ID");
+                UpdateDataGrid();
             }
             catch (FormatException)
             {
                 view.DisplayError("Введенные данные не корректны");
+                UpdateDataGrid();
+            }
+            catch (Exception e)
+            {
+                view.DisplayError("Введенная группа уже существует");
+                UpdateDataGrid();
+                //view.DisplayError(e.Message);
             }
 
         }
@@ -59,6 +67,8 @@ namespace Presentation.Presenter
                 {
                     facade.CreateGroup(name, DateTime.Now);
                     view.DisplaySuccess();
+                    UpdateDataGrid();
+                    view.ClearFields();
                 }                
             }
             catch (FormatException)
@@ -67,7 +77,7 @@ namespace Presentation.Presenter
             }
             catch (Exception e)
             {
-                view.DisplayError("Данного номера группы не существует");
+                view.DisplayError("Введенная группа уже существует");
                 //view.DisplayError(e.Message);
             }
         }
@@ -79,15 +89,18 @@ namespace Presentation.Presenter
                 if (CheckId(id))
                 {
                     facade.DeleteObject(Convert.ToInt32(id), new GroupConnector(db));
+                    UpdateDataGrid();
                 }
             }
             catch (ArgumentOutOfRangeException)
             {
                 view.DisplayError("Неверный ID");
+                UpdateDataGrid();
             }
             catch (FormatException)
             {
                 view.DisplayError("Введенные данные не корректны");
+                UpdateDataGrid();
             }
         }
 
@@ -110,6 +123,10 @@ namespace Presentation.Presenter
             }
         }
 
+        public void UpdateDataGrid()
+        {
+            view.UpdGrid(facade.showAllObjectsData(new GroupConnector(db)));
+        }
 
     }
 }

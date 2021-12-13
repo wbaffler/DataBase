@@ -39,10 +39,14 @@ namespace Core
             {
                 List<string> list = new List<string>();
                 list.Add(Convert.ToString(student.Id));
-                list.Add(Convert.ToString(student.GroupId));                
+                list.Add(Convert.ToString(student.GroupId));
                 list.Add(Convert.ToString(student.Name));
                 list.Add(Convert.ToString(student.Age));
                 matr.Add(list);
+            }
+            foreach (var line in matr)
+            {
+                line.Add(db.Groups.Single(x => x.Id == Convert.ToInt32(line[1])).Name);
             }
             return matr;  
         }
@@ -68,7 +72,8 @@ namespace Core
             Group group = db.Groups.SingleOrDefault(x => x.Id == groupId);
             if (group != null)
             {
-                Student student = new Student { Name = name, Age = age, GroupId = groupId };
+                Student student = new Student 
+                { Name = name, Age = age, GroupId = groupId };
                 db.Students.Add(student);
                 db.SaveChanges();
             }

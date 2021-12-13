@@ -30,6 +30,16 @@ namespace Core
                 throw new ArgumentOutOfRangeException();
             }
         }
+        public int GetId(string name)
+        {
+            Group group = db.Groups.SingleOrDefault(x => x.Name == name);
+            if (group != null)
+            {
+                return group.Id;
+            }
+            else
+                throw new ArgumentOutOfRangeException();
+        }
         public List<List<string>> DataMatrix()
         {
             List<List<string>> matr = new List<List<string>>();
@@ -46,11 +56,16 @@ namespace Core
         public void Change(string name, int id)
         {
             Group group = db.Groups.SingleOrDefault(x => x.Id == id);
+            Group grName = db.Groups.SingleOrDefault(x => x.Name == name && x.Id != id);
 
-            if (group != null)
+            if (group != null && grName == null)
             {
                 group.Name = name;
                 db.SaveChanges();
+            }
+            else if (grName != null)
+            {
+                throw new Exception("Uncorrect name");
             }
             else
             {
@@ -60,9 +75,15 @@ namespace Core
 
         public void Create(string name, DateTime creationDate)
         {
-            Group group = new Group { Name = name, CreationDate = creationDate };
-            db.Groups.Add(group);
-            db.SaveChanges();
+            Group gr = db.Groups.SingleOrDefault(x => x.Name == name);
+            if (gr == null)
+            {
+                Group group = new Group { Name = name, CreationDate = creationDate };
+                db.Groups.Add(group);
+                db.SaveChanges();
+            }
+            else
+                throw new Exception("Uncorrect name");
 
         }
 

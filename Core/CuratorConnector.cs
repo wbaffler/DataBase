@@ -43,6 +43,10 @@ namespace Core
                 list.Add(Convert.ToString(curator.Email));
                 matr.Add(list);
             }
+            foreach (var line in matr)
+            {
+                line.Add(db.Groups.Single(x => x.Id == Convert.ToInt32(line[1])).Name);
+            }
             return matr;
         }
         public void Change(int groupId, string name, string email, int id)

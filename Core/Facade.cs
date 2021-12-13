@@ -11,6 +11,7 @@ namespace Core
         }
         private DatabaseContext.ApplicationContext db;
 
+        private const int _indexOfGroupName = 1;
         public void ChangeStudent(int groupId, string name, int age, int id)
         {
             StudentConnector studentConnector = new StudentConnector(db);
@@ -73,6 +74,22 @@ namespace Core
         public List<List<string>> showAllObjectsData(IConnector connector)
         {
             return connector.DataMatrix();
+        }
+
+        public int GroupId(string groupName)
+        {
+            GroupConnector groupConnector = new GroupConnector(db);
+            return groupConnector.GetId(groupName);
+        }
+        public List<string> GroupNames()
+        {
+            List<string> list = new List<string>();
+            GroupConnector groupConnector = new GroupConnector(db);
+            foreach (var line in groupConnector.DataMatrix())
+            {
+                list.Add(line[_indexOfGroupName]);
+            }
+            return list;
         }
     }
 }

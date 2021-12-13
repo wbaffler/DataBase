@@ -16,9 +16,9 @@ namespace Presentation.Presenter
         private DatabaseContext.ApplicationContext db;
         private Facade facade;
         private readonly StudentForm view;
-        private bool CheckData(string groupId, string name, string age)
+        private bool CheckData(string group, string name, string age)
         {
-            if (int.TryParse(groupId, out int d1) && int.TryParse(age, out int d2) && name.Length != 0)
+            if (int.TryParse(age, out int d2) && group.Length != 0 && name.Length != 0)
                 return true;
             else
                 throw new FormatException();
@@ -30,39 +30,45 @@ namespace Presentation.Presenter
             else
                 throw new FormatException();
         }
-        public void Change(string groupId, string name, string age, string id)
+        public void Change(string groupName, string name, string age, string id)
         {
             try
             {                
-                if (CheckData(groupId, name, age) && CheckId(id))
+                if (CheckData(groupName, name, age) && CheckId(id))
                 {
-                    facade.ChangeStudent(Convert.ToInt32(groupId), name, Convert.ToInt32(age), Convert.ToInt32(id));
+                    int idGroup = facade.GroupId(groupName);
+                    facade.ChangeStudent(idGroup, name, Convert.ToInt32(age), Convert.ToInt32(id));
                     
                 }                   
             }
             catch (ArgumentOutOfRangeException)
             {
-                view.DisplayError("Неверный ID");
+                view.DisplayError("Неверное назввание группы");
+                UpdateDataGrid();
             }
             catch (FormatException)
             {
                 view.DisplayError("Введенные данные не корректны");
+                UpdateDataGrid();
             }
             catch (Exception)
             {
                 view.DisplayError("Данный номер группы не существует");
+                UpdateDataGrid();
             }
 
         }
 
-        public void Create(string groupId, string name, string age)
+        public void Create(string groupName, string name, string age)
         {
             try
             {
-                if(CheckData(groupId, name, age))
+                if(CheckData(groupName, name, age))
                 {
-                    facade.CreateStudent(Convert.ToInt32(groupId), name, Convert.ToInt32(age));                    
-                    view.DisplaySuccess();
+                    int idGroup = facade.GroupId(groupName);
+                    facade.CreateStudent(idGroup, name, Convert.ToInt32(age));
+                    UpdateDataGrid();
+                    view.ClearFields();
                 }               
             }
             catch (FormatException)
@@ -83,17 +89,14 @@ namespace Presentation.Presenter
                 if(CheckId(id))
                 {
                     facade.DeleteObject(Convert.ToInt32(id), new StudentConnector(db));
-                    GetDataGrid();
+                    UpdateDataGrid();
                 }
                 
             }
             catch (ArgumentOutOfRangeException)
             {
                 view.DisplayError("Неверный ID");
-            }
-            catch (FormatException)
-            {
-                view.DisplayError("Введенные данные не корректны");
+                UpdateDataGrid();
             }
         }
 
@@ -148,7 +151,7 @@ namespace Presentation.Presenter
                     if (curName != null)
                         view.CuratorName = curName;
                     else
-                        view.CuratorName = "Куратор у заданной группы отсутствует";
+                        view.CuratorName = "Куратор отсутствует";
                 }               
             }           
             catch (ArgumentNullException)
@@ -161,9 +164,14 @@ namespace Presentation.Presenter
             }
         }
 
-        public void GetDataGrid()
+        public void UpdateDataGrid()
         {
             view.UpdGrid(facade.showAllObjectsData(new StudentConnector(db)));
+        }
+
+        public void FindAllGroups()
+        {
+            view.SetComboBox(facade.GroupNames());
         }
 
     }
